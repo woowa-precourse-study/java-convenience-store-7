@@ -28,4 +28,8 @@ public class Stock {
     public String getPromotion(){
         return promotion;
     }
+
+    public void updateQuantity(int quantity){
+        this.quantity -= quantity;
+    }
 }

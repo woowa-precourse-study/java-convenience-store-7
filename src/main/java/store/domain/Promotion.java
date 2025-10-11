@@ -24,5 +24,24 @@ public class Promotion {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+    public String getName() {
+        return name;
+    }
+
+    public int getBuy(){
+        return buy;
+    }
+
+    public int getGet(){
+        return get;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 
 }
