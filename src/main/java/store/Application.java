@@ -101,6 +101,7 @@ public class Application {
 
                 //프로모션인지 확인
                 for (Stock stock : searchResult) {
+                    System.out.println(stock.getName() + stock.getPrice() + stock.getQuantity() + stock.getPromotion());
                     //일단 재고 확인부터
                     //전부 재고 확인했는데 구매 불가능하면 out 하고 에러 메시지
                     if(stock.getQuantity() < orderQuantity) {
@@ -121,11 +122,12 @@ public class Application {
                                 break;
                             }
                             int extraQuantity = 0;
+                            int temp = orderQuantity / (buy + get);
+                            extraQuantity += temp;
+                            //추가 시 증정 상품 가능인 경우
                             if(orderQuantity % (buy + get) != 0 ) {
-                                int temp = orderQuantity / (buy + get);
-                                extraQuantity += temp;
                                 System.out.println("현재 {" + stock.getName() + "}은(는) " + get + "개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)");
-                                Character agree = Console.readLine().toUpperCase().charAt(0);
+                                char agree = Console.readLine().toUpperCase().charAt(0);
                                 if(agree == 'Y') { // 추가분 주문에 추가
                                     orderQuantity = orderQuantity  + ((buy + get) - orderQuantity % (buy + get));
                                     extraQuantity += 1;
