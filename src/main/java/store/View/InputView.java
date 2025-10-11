@@ -9,4 +9,8 @@ public class InputView {
         String[] orders = order.split(",");
 
     }
+
+    public void continueOrder(){
+
+    }
 }

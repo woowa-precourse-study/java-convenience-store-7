@@ -3,6 +3,11 @@ package store;
 import camp.nextstep.edu.missionutils.Console;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.sql.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +26,7 @@ import store.domain.Stocks;
 
 public class Application {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO: 프로그램 구현
 
         // 입력 받기 전 파일 입력 단계
@@ -151,8 +156,24 @@ public class Application {
 
             }
             output.printReceipt(receipts);
-            isContinue = false;
+
+
+            System.out.println("감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)");
+            char choice = Console.readLine().charAt(0);
+            if(choice == 'N'){
+                isContinue = false;
+
+            }
         }
+
+        List<String> lines = new ArrayList<>();
+        lines.add("name,price,quantity,promotion");
+        for(Stock s : stocks){
+            String line = String.format("%s,%s,%s,%s", s.getName(), s.getPrice(), s.getQuantity(), s.getPromotion());
+            lines.add(line);
+        }
+        Path filePath = Paths.get("src/main/resources/products.md");
+        Files.write(filePath, lines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
     }
 }
