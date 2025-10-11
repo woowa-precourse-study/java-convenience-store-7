@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.Array;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -86,13 +87,16 @@ public class Application {
             // 입력 받은 상품으로 검색
             for (String product : menu) {
                 String orderName = product.split("-")[0];
+                int orderQuantity = Integer.parseInt(product.split("-")[1]);
+
                 boolean exists = stocks.stream()
                         .anyMatch(stock -> stock.getName().equals(orderName));
+
                 if (!exists) {
                     throw new IllegalArgumentException("상품 이름을 정확하게 입력해주세요");
                 }
+                //디버그용 코드
                 System.out.println(orderName);
-                int orderQuantity = Integer.parseInt(product.split("-")[1]);
                 System.out.println(orderQuantity);
 
                 // 이름으로 일단 검색
@@ -106,6 +110,7 @@ public class Application {
 
                 //프로모션인지 확인
                 for (Stock stock : searchResult) {
+                    //디버그용 코드
                     System.out.println(stock.getName() + stock.getPrice() + stock.getQuantity() + stock.getPromotion());
                     //일단 재고 확인부터
                     //전부 재고 확인했는데 구매 불가능하면 out 하고 에러 메시지
@@ -136,9 +141,10 @@ public class Application {
                                 if(agree == 'Y') { // 추가분 주문에 추가
                                     orderQuantity = orderQuantity  + ((buy + get) - orderQuantity % (buy + get));
                                     extraQuantity += 1;
-                                }else{ // 추가분 주문에서 제외
-                                    orderQuantity = orderQuantity - orderQuantity % (buy + get);
                                 }
+//                                else{ // 추가분 주문에서 제외
+//                                    orderQuantity = orderQuantity - (orderQuantity % (buy + get));
+//                                }
                             }
                             stock.updateQuantity(orderQuantity);
                             Receipt order = new Receipt(orderName, orderQuantity,extraQuantity,stock.getPrice());
@@ -155,7 +161,13 @@ public class Application {
                 }
 
             }
-            output.printReceipt(receipts);
+            boolean isMemberShip = false;
+            System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+            char agree = Console.readLine().toUpperCase().charAt(0);
+            if(agree == 'Y') {
+                isMemberShip = true;
+            }
+            output.printReceipt(receipts,isMemberShip);
 
 
             System.out.println("감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)");

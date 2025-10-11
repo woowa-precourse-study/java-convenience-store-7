@@ -23,7 +23,7 @@ public class OutputView {
         }
     }
 
-    public void printReceipt(List<Receipt> receipts){
+    public void printReceipt(List<Receipt> receipts, boolean isMemberShip){
         int totalQuantity = 0;
         int totalPrice = 0;
         int totalReduce = 0;
@@ -43,7 +43,9 @@ public class OutputView {
                 totalReduce += receipt.getExtraQuantity() * receipt.getPrice();
             }
         }
-        membershipReduce = (totalPrice-totalReduce) * 3 / 10;
+        if(isMemberShip){
+            membershipReduce = (totalPrice-totalReduce) * 3 / 10;
+        }
         finalPrice = totalPrice - totalReduce - membershipReduce;
         System.out.println("=============================");
         System.out.printf("%-10s %5d %,10d %n","총구매액",totalQuantity,totalPrice);
